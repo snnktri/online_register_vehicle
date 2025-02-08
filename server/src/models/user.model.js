@@ -70,7 +70,7 @@ const userSchema = new Schema({
         unique: true
     },
     address: addressSchema,
-    nagarkitNumber: {
+    nagarkitaNumber: {
         type: Number,
         required: true,
         unique: true,
@@ -87,7 +87,6 @@ const userSchema = new Schema({
     },
 
 },
-
 {
     timestamps: true
 });
