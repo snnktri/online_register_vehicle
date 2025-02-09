@@ -1,25 +1,59 @@
+import { UserDetails } from "../models/userDetails.model.js";
 import { User } from "../models/user.model.js";
-import { uploadOnCloudinary } from "../utils/cloudineary.js";
+import {uploadonCloudinary } from "../utils/cloudineary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const register = asyncHandler( async (req, res) => {
-    const {firstName, lastName, email, password, phoneNumber, address, nagarkitaNumber} = req.body;
+const userRegister = asyncHandler(async (req, res)=> {
+    const { email, password } = req.body;
 
-    const { district, province, areaType, city, wadaNumber } = address;
+    if([email, password].some(field => field?.trim() === "")) {
+        throw new ApiError("All fields are required", 400);
+    }
+
+    const userExist = await User.findOne({ email });
+
+    if(userExist) {
+        throw new ApiError("Email already exists", 400);
+    }
+
+    const userCreate = await User.create({
+        email,
+        password,
+        role: "USER"
+    });
+
+    console.log(userCreate);
+
+    const user = await User.findById(userCreate._id).select("-password");
+
+
+   if(!user) {
+        throw new ApiError("Failed to create user", 500);
+    }
+
+    return res.status(201).json(
+        new ApiResponse(200, user, "user created successfully")
+    );
+})
+
+const registerDetails = asyncHandler( async (req, res) => {
+    const {firstName, lastName, user, phoneNumber, address, nagarkitaNumber, district, province, areaType, city, wadaNumber} = req.body;
+
+    
 
     if([
-        firstName, lastName, email, phoneNumber, nagarkitaNumber,
-        district, province, areaType, city, wadaNumber, password
+        firstName, lastName,  phoneNumber, nagarkitaNumber,
+        district, province, areaType, city, wadaNumber,user
     ].some(field => field?.trim() === "")) {
         throw new ApiError("All fields are required", 400);
     }
 
-    const user = await User.findOne({ email });
+    const userexist = await UserDetails.findById(user);
 
-    if(user) {
-        throw new ApiError("Email already exists", 400);
+    if(userexist) {
+        throw new ApiError("user already exists", 400);
     }
 
     const { profile, nFront, nBack } = req.files;
@@ -32,16 +66,19 @@ const register = asyncHandler( async (req, res) => {
         throw new ApiError("Nagarkit photos are required", 400);
     };
 
-    const profilePhoto = await uploadOnCloudinary(profile[0].path, 'profile_photos');
-    const nFrontPhoto = await uploadOnCloudinary(nFront[0].path, 'nagarikta_photos');
-    const nBackPhoto = await uploadOnCloudinary(nBack[0].path, 'nagarikta_photos');
+   // console.log(req.files)
 
-    const newUser = await User.create({
+    const profilePhoto = await uploadonCloudinary(profile[0].path);
+    const nFrontPhoto = await uploadonCloudinary(nFront[0].path);
+    const nBackPhoto = await uploadonCloudinary(nBack[0].path);
+
+
+
+    const newUser = await UserDetails.create({
         firstName,
         lastName,
-        profile: profilePhoto.url,
-        email,
-        password,
+        user,
+        profile: profilePhoto?.url,
         phoneNumber,
         address: {
             district,
@@ -51,14 +88,13 @@ const register = asyncHandler( async (req, res) => {
             wadaNumber
         },
         nagariktaPhotos: {
-            front: nFrontPhoto.url,
-            back:nBackPhoto.url,
+            front: nFrontPhoto?.url,
+            back:nBackPhoto?.url,
         },
-        role,
         nagarkitaNumber
     })
 
-    const createdUser = await User.findById(newUser._id).select("-password");
+    const createdUser = await UserDetails.findById(newUser._id);
 
     if(!createdUser) {
         throw new ApiError("Failed to create user", 500);
@@ -66,9 +102,82 @@ const register = asyncHandler( async (req, res) => {
 
     return res.status(201).
     json(
-        new ApiResponse("user created successfully", createdUser, 200)
+        new ApiResponse(200, createdUser, "user Details submitted successfully")
     );
 
 })
 
-export { register };
+const loginUser = asyncHandler( async(req, res) => {
+    const { email, password } = req.body;
+
+    if([email, password].some(field => field?.trim() === "")) {
+        throw new ApiError("All fields are required", 400);
+    }
+
+    const user = await User.findOne({email});
+
+   // console.log(user);
+    
+    if(!user) {
+        throw new ApiError("Invalid email or password", 401);
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(password);
+
+    if (!isPasswordValid) {
+     throw new ApiError(401, "Invalid user credentials")
+     }
+
+    const accessToken = await user.generateAccessToken();
+
+    if(!accessToken) {
+        throw new ApiError("Failed to generate access token", 500);
+    }
+
+    const loginUser = await User.findById(user._id).select("-password");
+
+    const options = {
+        httpOnly: true,
+    }
+
+    return res.status(200).
+    cookie("accessToken", accessToken, options).
+    json(
+        new ApiResponse(200, loginUser, "user logged in successfully")
+    );
+})
+
+const logout = asyncHandler( async (req, res) => {
+    const user = req.user;
+
+    console.log(user);
+
+    const userexist = await User.findById(user._id);
+
+    if(!userexist) {
+        throw new ApiError(404, "User not found");
+    }
+
+    const options = {
+        httpOnly: true,
+    }
+
+    return res.status(200).
+    clearCookie("accessToken", options).
+    json(
+        new ApiResponse(200, null, "user logged out successfully")
+    );
+
+})
+
+
+const protectedUser = asyncHandler(async (req, res) => {
+    if(!req.user) {
+        throw new ApiError(401, "Not authorized");
+    }
+    return res.status(200).json(
+        new ApiResponse(200, req.user, "protected user")
+    );
+
+})
+export { registerDetails, userRegister, loginUser, logout, protectedUser };

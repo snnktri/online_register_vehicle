@@ -16,6 +16,11 @@ const registerSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
+    },
+    userDetails: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserDetails',
         required: true
     },
     vehicle: {
