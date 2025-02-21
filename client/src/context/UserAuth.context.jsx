@@ -9,7 +9,7 @@ export const UserContextProvider = ({children}) => {
     useEffect(()=> {
         const localhost = async () => {
            try {
-            const token = localStorage.getItem("accessTokens");
+            const token = localStorage.getItem("accessTokensUser");
             console.log("Access token:", token);
             if(!token) {
                 console.log("Usr not logged in.");

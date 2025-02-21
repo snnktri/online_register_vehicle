@@ -24,7 +24,7 @@ const userRegister = asyncHandler(async (req, res)=> {
         role: "USER"
     });
 
-    console.log(userCreate);
+    //console.log(userCreate);
 
     const user = await User.findById(userCreate._id).select("-password");
 
@@ -130,6 +130,9 @@ const loginUser = asyncHandler( async(req, res) => {
 
     const accessToken = await user.generateAccessToken();
 
+
+   // consoel.log(accessToken);
+
     if(!accessToken) {
         throw new ApiError("Failed to generate access token", 500);
     }
@@ -143,7 +146,10 @@ const loginUser = asyncHandler( async(req, res) => {
     return res.status(200).
     cookie("accessToken", accessToken, options).
     json(
-        new ApiResponse(200, loginUser, "user logged in successfully")
+        new ApiResponse(200, {
+            loginUser,
+            accessToken: accessToken
+        }, "user logged in successfully")
     );
 })
 
