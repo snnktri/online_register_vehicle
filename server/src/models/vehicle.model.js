@@ -18,11 +18,15 @@ const vehicleSchema = new Schema({
         required: true
     },
     vehiclePhoto: {
-        type: String,
+        type: [String],
         required: true,
-        min: 2,
-        max: 3,
-    },
+        validate: {
+          validator: function(value) {
+            return value.length === 2;
+          },
+          message: 'Vehicle must have exactly 2 photos.'
+        }
+      },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -43,7 +47,7 @@ const vehicleSchema = new Schema({
     },
     fuelType: {
         type: String,
-        enum: ['Gasoline', 'Diesel', 'Electric', 'Hybrid'],
+        enum: ['Gasoline', 'Diesel', 'Electric', "Petrol"],
         required: true
     },
     vehiclePurchaseProof: {

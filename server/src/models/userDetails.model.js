@@ -59,7 +59,7 @@ const userDetailsSchema = new Schema({
     },
     address: addressSchema,
     nagarkitaNumber: {
-        type: Number,
+        type: String,
         required: true,
         unique: true,
     },

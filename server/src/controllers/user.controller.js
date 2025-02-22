@@ -39,18 +39,19 @@ const userRegister = asyncHandler(async (req, res)=> {
 })
 
 const registerDetails = asyncHandler( async (req, res) => {
-    const {firstName, lastName, user, phoneNumber, address, nagarkitaNumber, district, province, areaType, city, wadaNumber} = req.body;
+    const {firstName, lastName, phoneNumber, address, nagarkitaNumber, district, province, areaType, city, wadaNumber} = req.body;
 
-    
+    const user = req.user;
+
 
     if([
         firstName, lastName,  phoneNumber, nagarkitaNumber,
-        district, province, areaType, city, wadaNumber,user
+        district, province, areaType, city, wadaNumber
     ].some(field => field?.trim() === "")) {
         throw new ApiError("All fields are required", 400);
     }
 
-    const userexist = await UserDetails.findById(user);
+    const userexist = await UserDetails.findById(user._id);
 
     if(userexist) {
         throw new ApiError("user already exists", 400);
@@ -66,11 +67,13 @@ const registerDetails = asyncHandler( async (req, res) => {
         throw new ApiError("Nagarkit photos are required", 400);
     };
 
-   // console.log(req.files)
+   //console.log(req.files)
 
     const profilePhoto = await uploadonCloudinary(profile[0].path);
     const nFrontPhoto = await uploadonCloudinary(nFront[0].path);
     const nBackPhoto = await uploadonCloudinary(nBack[0].path);
+
+    console.log("I reach here");
 
 
 
@@ -94,15 +97,22 @@ const registerDetails = asyncHandler( async (req, res) => {
         nagarkitaNumber
     })
 
-    const createdUser = await UserDetails.findById(newUser._id);
+    console.log("I rach here 2")
 
-    if(!createdUser) {
-        throw new ApiError("Failed to create user", 500);
-    }
+    // const createdUser = await UserDetails.findById(newUser._id);
 
+    // if(!createdUser) {
+    //     throw new ApiError("Failed to create user", 500);
+    // }
+    // console.log("I am here know");
+    // console.log("Returning user: ", newUser);
+    // const simplifiedUser = {
+    //     id: newUser._id.toString(),
+    //     email: newUser.firstName,
+    // };
     return res.status(201).
     json(
-        new ApiResponse(200, createdUser, "user Details submitted successfully")
+        new ApiResponse(200, newUser, "user Details submitted successfully")
     );
 
 })

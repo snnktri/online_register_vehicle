@@ -4,15 +4,17 @@ import { ApiError } from "../utils/ApiError.js";
 
 export const verifyJWT = async (req, res, next) => {
     try {
-        const token = req.cookies?.accessToken || req.headers["Authorization"]?.replace("Bearer ", "");
+        const token = req.cookies?.accessToken || req.headers['authorization']?.replace("Bearer ", "");
+       // console.log('Incoming Headers:', req.headers);
 
-       // console.log("TOken:", token);
+      //  console.log("Authorization Header:", req.headers['authorization']);  // Check the Authorization header
+        //console.log("Token:", token); 
 
         if(!token) {
             throw new ApiError(401, "Not authorized");
         }
 
-       // console.log("secret: ", process.env.ACCESS_TOKEN_SECRET);
+        //console.log("secret: ", process.env.ACCESS_TOKEN_SECRET);
 
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
@@ -39,6 +41,6 @@ export const verifyJWT = async (req, res, next) => {
 
     } catch (error) {
         console.error("Error on verifying jwt: ", error);
-        next();
+        next(error);
     }
 }

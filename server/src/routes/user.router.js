@@ -13,10 +13,11 @@ router.route("/login").post(loginUser);
 
 router.route("/logout").get(verifyJWT, logout);
 
-router.route("/protectedUser").get(verifyJWT, protectedUser)
+router.route("/protectedUser").get(verifyJWT, protectedUser);
 
 
 router.route("/register").post(
+    verifyJWT,
     upload.fields(
         [
            {
@@ -36,8 +37,8 @@ router.route("/register").post(
            }
 
         ]
-    )
-    ,registerDetails
-)
+    ),
+    registerDetails
+);
 
 export default router;
