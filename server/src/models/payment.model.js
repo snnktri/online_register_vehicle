@@ -17,11 +17,13 @@ const paymentSchema = new Schema({
     },
     registrationNumber:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     }, 
     vin: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 
 },

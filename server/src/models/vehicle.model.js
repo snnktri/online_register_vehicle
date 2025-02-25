@@ -53,6 +53,10 @@ const vehicleSchema = new Schema({
     vehiclePurchaseProof: {
         type: String,
         required: true
+    },
+    licencePlate: {
+        type: String,
+        unique: true,
     }
 },
 {

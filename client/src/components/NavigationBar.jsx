@@ -1,10 +1,14 @@
 import React from 'react';
 import logo from '../assets/logo.png';
 import { NavLink } from 'react-router-dom';
+import { UserContext } from '../context/UserAuth.context';
+import { useContext } from 'react';
 
 const NavigationBar = () => {
+  const { user } = useContext(UserContext);
+//  console.log(user);
   return (
-  <header className="mt-0 container bg-white shadow-md shadow-gray-300 w-full h-auto">
+  <header className="mt-0 container bg-white shadow-md shadow-gray-300 h-auto">
     <nav className='w-full flex mx-auto items-center flex-col justify-center gap-4'>
       <div className='mt-5 mx-6 flex flex-col md:flex-row items-center justify-center gap-2'>
         {/* image */}
@@ -37,14 +41,23 @@ const NavigationBar = () => {
           Home
         </NavLink>
         </li> 
-        <li>
+        {
+        user? (<li>
+          <NavLink 
+          to="/userInterface" 
+          className={({ isActive }) => `${(isActive ? 'text-orange-500' : 'text-orange-50')}`}
+         >
+      Profile
+    </NavLink>
+    </li>):(<li>
               <NavLink 
               to="/login" 
               className={({ isActive }) => `${(isActive ? 'text-orange-500' : 'text-orange-50')}`}
              >
           Login
         </NavLink>
-        </li>
+        </li>)}
+        
           </ul>
       
       </div>

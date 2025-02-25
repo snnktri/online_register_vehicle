@@ -6,7 +6,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerVehilcleDetails = asyncHandler(async (req, res) => {
-    const { brand, model, color, vin, engineNumber, manufacutureData, type, fuelType } = req.body;
+    const { brand, model, color, vin, engineNumber, manufacutureData, type, fuelType, licencePlate } = req.body;
 
     console.log(req.body);
 
@@ -53,6 +53,7 @@ const registerVehilcleDetails = asyncHandler(async (req, res) => {
         fuelType,
         vehiclePurchaseProof: vehiclePurchaseProofUrl?.url,
         vehiclePhoto: vehilePhotosUrl,
+        licencePlate: licencePlate || ""
     })
 
     const createVehicle = await Vehicle.findById(vehicle._id);
@@ -68,6 +69,10 @@ const registerVehilcleDetails = asyncHandler(async (req, res) => {
         new ApiResponse(200, createVehicle, "vehicle details registered successfully.")
     );
 });
+
+// const generateNumberPlate = asyncHandler(async(req, res) => {
+//     const { vin } = req.
+// })
 
 export {
     registerVehilcleDetails,

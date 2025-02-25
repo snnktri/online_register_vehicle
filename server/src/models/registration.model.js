@@ -12,11 +12,6 @@ const registerSchema = new Schema({
         ref: 'User',
         required: true,
     },
-    vehicle: {
-        type: Schema.Types.ObjectId,
-        ref: 'Vehicle',
-        required: true
-    },
     expiryDate: {
         type: Date,
         required: true
@@ -30,15 +25,6 @@ const registerSchema = new Schema({
         type: String,
         required: true
     },
-    // registrationStatus: {
-    //     type: String,
-    //     enum: ['registered', 'pneding', 'rejected'],
-    //     default: 'pending'
-    // },
-    // registerAmount: {
-    //     type: Number,
-    //     required: true
-    // },
     vin: {
         type: String,
         required: true,

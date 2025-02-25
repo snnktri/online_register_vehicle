@@ -8,14 +8,14 @@ export const UserContextProvider = ({children}) => {
 
     useEffect(()=> {
         const localhost = async () => {
-           try {
-            const token = localStorage.getItem("accessTokensUser");
-            console.log("Access token:", token);
+
+            const token = localStorage.getItem("accessTokenUser");
+            //console.log("Access token:", token);
             if(!token) {
                 console.log("Usr not logged in.");
                 return ;
             }
-
+           try {
             const response = await api.get("/users/protectedUser",
                 {
                     headers: {
@@ -24,7 +24,7 @@ export const UserContextProvider = ({children}) => {
                 }
             )
 
-            console.log(response);
+            //console.log(response);
 
             setUser(true);
             

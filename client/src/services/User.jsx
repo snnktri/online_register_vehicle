@@ -21,3 +21,39 @@ export const login = async(formData) => {
         console.error("Error login: ", error.message);
     }
 }
+
+export const formSubmit = async(formData) => {
+    try {
+        const token = localStorage.getItem("accessTokenUser");
+       // console.log("token: ", token);
+        const response = await api.post("/users/register", formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        console.log("rewsponse from user: ", response);
+        return response.data;
+    } catch (error) {
+        console.error("Error register user details: ", error.message);
+    }
+}
+
+export const logOut = async() => {
+    try {
+        const response = await api.get("/users/logout",
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessTokenUser")}`,
+                },
+            }
+        );
+        
+        if (response.status === 200) {
+            localStorage.removeItem("accessTokenUser");
+            console.log("Successfully logged out");
+            window.location.href = "/login"; 
+        }
+    } catch (error) {
+        console.error("Error log out: ", error.message);
+    }
+}

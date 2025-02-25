@@ -1,6 +1,7 @@
-import React, { useState} from 'react';
+import React, { useContext, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/User';
+import { UserContext } from "../context/UserAuth.context";
 const Login = () => {
 
     const [userInput, setUserInput] = useState({
@@ -8,6 +9,7 @@ const Login = () => {
         password: ''
       });
     
+    const { setUser } = useContext(UserContext);
       const navigate = useNavigate();
     
       const handleChange = (e) => {
@@ -25,11 +27,12 @@ const Login = () => {
         const response = await login(userInput);
 
         if(response.success) {
+          setUser(true);
             setUserInput({
                 email: '',
                 password: ''
             })
-            navigate("/userDetails");
+            navigate("/userInterface");
         }
        } catch (error) {
         console.error("Error on submitting form", error.message);

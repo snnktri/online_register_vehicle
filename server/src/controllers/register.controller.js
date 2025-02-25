@@ -53,7 +53,7 @@ const registerDetails = asyncHandler( async(req, res) => {
 
     const thridPartyInsurance = req.file;
 
-    console.log(thridPartyInsurance);
+   // console.log(thridPartyInsurance);
 
     const isUrl = await uploadonCloudinary(thridPartyInsurance.path);
 
@@ -74,7 +74,6 @@ const registerDetails = asyncHandler( async(req, res) => {
         registerDate,
         expiryDate,
         registrationNumber,
-        vehicle: vehicleExist._id,
         vin,
         thridPartyInsurance: isUrl.url
     });
