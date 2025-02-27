@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { vehicleForm } from '../services/Vehicle';
+import { useNavigate } from "react-router-dom"
 
 const RegisterVehicle = () => {
     const [formData, setFormData] = useState({
@@ -24,6 +25,8 @@ const RegisterVehicle = () => {
             [name]: value,
         }));
     };
+
+    const navigate = useNavigate();
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
@@ -63,6 +66,7 @@ const RegisterVehicle = () => {
         //console.log(formInput);
         try {
             const response = await vehicleForm(formInput);
+            console.log(response.data);
 
             if(response.success) {
                 console.log("Vehicle registered successfully");
@@ -79,7 +83,7 @@ const RegisterVehicle = () => {
                     fuelType: 'Gasoline',
                     vehiclePurchaseProof: null,
                 });
-                
+                navigate("/registerDetails")
 
             }
         } catch (error) {
@@ -88,164 +92,171 @@ const RegisterVehicle = () => {
        console.log('Form Data:', formData);
       
     };
-  return (
-    <div>
-      <div>
-
-      </div>
-      <div>
-      <form onSubmit={handleSubmit}>
-            <div>
-                <label>Brand</label>
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+          <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-lg">
+            <h2 className='text-2xl font-bold text-center mb-4'>Enter Vehicle Details</h2>
+      
+            <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
+              <h1 className='text-xl text-center'>
+                Fill in the details and submit
+              </h1>
+      
+              <div>
+                <label className='block text-sm font-medium'>Brand</label>
                 <input
-                    type="text"
-                    name="brand"
-                    value={formData.brand}
-                    onChange={handleChange}
-                    required
+                  type="text"
+                  name="brand"
+                  value={formData.brand}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-            </div>
-
-            <div>
-                <label>Model</label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Model</label>
                 <input
-                    type="text"
-                    name="model"
-                    value={formData.model}
-                    onChange={handleChange}
-                    required
+                  type="text"
+                  name="model"
+                  value={formData.model}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-            </div>
-
-            <div>
-                <label>Color</label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Color</label>
                 <input
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleChange}
-                    required
+                  type="text"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-            </div>
-
-            <div>
-                <label>VIN</label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>VIN</label>
                 <input
-                    type="text"
-                    name="vin"
-                    value={formData.vin}
-                    onChange={handleChange}
-                    required
+                  type="text"
+                  name="vin"
+                  value={formData.vin}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-            </div>
-
-            <div>
-                <label>
-                    Date of Manufacture: 
-                    <input
-                        type="date"
-                        name="manufacutureData"
-                        value={formData.manufacutureData}
-                        onChange={handleChange} />
-                </label>
-            </div>
-
-            <div>
-                <label>Engone Number: 
-                    <input
-                        type="text"
-                        name="engineNumber"
-                        value={formData.engineNumber}
-                        onChange={handleChange} />
-                </label>
-            </div>
-            <div>
-                <label>Vehicle Type:
-                    <select
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}>
-                            {/* enum: ['Truck', 'Bus', 'Car', 'Motercycle'], */}
-                        <option value="Car">Car</option>
-                        <option value="Motercycle">Motorcycle</option>
-                        <option value="Truck">Truck</option>
-                        <option value="Bus">Bus</option>
-                    </select>
-                </label>
-            </div>
-
-            <div>
-                <label>Fuel Type:
-                    <select
-                        name="fuelType"
-                        value={formData.fuelType}
-                        onChange={handleChange}>
-                            {/* enum: ['Gasoline', 'Diesel', 'Electric'], */}
-                        <option value="Gasoline">Gasoline</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Electric">Electric</option>
-                    </select>
-                </label>
-            </div>
-
-            <div>
-                <label>Vehicle Photos</label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Date of Manufacture</label>
                 <input
-                    type="file"
-                    name="vehiclePhoto"
-                    onChange={handleImageChange}
-                    multiple
-                    accept="image/*"
-                    required
+                  type="date"
+                  name="manufacutureData"
+                  value={formData.manufacutureData}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-                <div>
-                    {formData.vehiclePhoto.length > 0 &&
-                        formData.vehiclePhoto.map((photo, index) => (
-                            <img
-                                key={index}
-                                src={photo}
-                                alt={`Preview ${index + 1}`}
-                                style={{ width: '100px', height: '100px', margin: '10px' }}
-                            />
-                        ))}
-                </div>
-            </div>
-
-            <div>
-                <label>Vehicle Purchase Proof</label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Engine Number</label>
                 <input
-                    type="file"
-                    name="vehiclePurchaseProof"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    required
+                  type="text"
+                  name="engineNumber"
+                  value={formData.engineNumber}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-                {formData.vehiclePurchaseProof && (
-                    <img
-                        src={formData.vehiclePurchaseProof}
-                        alt="Vehicle Purchase Proof"
-                        style={{ width: '100px', height: '100px', margin: '10px' }}
-                    />
-                )}
-            </div>
-            <div>
-                <p className='text-blue-500'>Do not needed for the first time registratin.</p>
-                <p className='text-red-500'>If it is for renewal please provide plate number</p>
-                <label>Licence Plate Number: </label>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Vehicle Type</label>
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                >
+                  <option value="Car">Car</option>
+                  <option value="Motorcycle">Motorcycle</option>
+                  <option value="Truck">Truck</option>
+                  <option value="Bus">Bus</option>
+                </select>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Fuel Type</label>
+                <select
+                  name="fuelType"
+                  value={formData.fuelType}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                >
+                  <option value="Gasoline">Gasoline</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Petrol">Petrol</option>
+                  <option value="Electric">Electric</option>
+                </select>
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Vehicle Photos</label>
                 <input
-                    type="text"
-                    name="licencePlate"
-                    value={formData.licencePlate}
-                    onChange={handleChange}
+                  type="file"
+                  name="vehiclePhoto"
+                  onChange={handleImageChange}
+                  multiple
+                  accept="image/*"
+                  className="w-full p-2 border rounded-md"
+                  required
                 />
-            </div>
-
-            <button type="submit">Submit</button>
-        </form>
-      </div>
-    </div>
-  )
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>Vehicle Purchase Proof</label>
+                <input
+                  type="file"
+                  name="vehiclePurchaseProof"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+      
+              <div>
+                <label className='block text-sm font-medium'>License Plate Number</label>
+                <input
+                  type="text"
+                  name="licencePlate"
+                  value={formData.licencePlate}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                />
+                <p className="text-blue-500 mt-2">Not needed for first-time registration.</p>
+                <p className="text-red-500">Required for renewal, please provide the plate number.</p>
+              </div>
+      
+              <div className="w-full flex justify-center items-center">
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+      
 }
 
 export default RegisterVehicle

@@ -281,15 +281,21 @@ export const statusReturn = asyncHandler(async(req, res) => {
     },
     {
       $project: {
-        status: 0, // Exclude the 'status' field
-        registerAmount: 0, // Exclude the 'registerAmount' field
-        __v: 0, // Exclude the '__v' field
-        "user.password": 0, // Optionally exclude sensitive data like user password
-        "user._id": 0,
-        "user.__v": 0 // Optionally exclude the _id from the populated user document
+        "user.password": 0, 
+        "user._id": 0,     
+        "user.__v": 0,       
+        "paymentDetails": 0,
+        __v: 0,              
+        "registration._id": 0, 
+        "vehicle._id": 0,     
+        "userDetail._id": 0,  
+        "registration.vin": 0,
+        "vehicle.vin": 0       
       }
     }
-  ])
+  ]);
+  
+  
 
   return res.status(200).
   json(

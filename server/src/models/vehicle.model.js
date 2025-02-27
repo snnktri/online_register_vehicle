@@ -15,7 +15,8 @@ const vehicleSchema = new Schema({
     },
     vin: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     vehiclePhoto: {
         type: [String],

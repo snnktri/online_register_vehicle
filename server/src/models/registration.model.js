@@ -23,7 +23,8 @@ const registerSchema = new Schema({
     },
     registrationNumber: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     vin: {
         type: String,

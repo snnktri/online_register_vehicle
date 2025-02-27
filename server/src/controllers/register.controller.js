@@ -7,16 +7,43 @@ import { User } from "../models/user.model.js";
 import { Vehicle } from "../models/vehicle.model.js";
 import { UserDetails } from "../models/userDetails.model.js";
 
+const generateRegistratinNumber = async(province, district) => {
+
+    let exist =  false;
+
+    while(!exist){
+      const randomNumber = Math.floor(1000 + Math.random() * 9000);
+
+     // console.log(randomNumber);
+      const p = province[0].charAt(0).toUpperCase();
+      const d = district[0].charAt(0).toUpperCase();
+
+      let rN = `${p}-${randomNumber}-${d}`;
+
+      const registerExist = await Register.findOne({
+        registrationNumber: rN
+      });
+
+      if(!registerExist) {
+        exist = true;
+        return rN;
+      }
+      
+    }
+}
+
 
 const registerDetails = asyncHandler( async(req, res) => {
-    const { registerDate,  expiryDate, registrationNumber, vin  } = req.body;
+    const { registerDate,  expiryDate, vin  } = req.body;
+    let {registrationNumber} = req.body;
+   // console.log(registrationNumber);
 
-   if(!registrationNumber || !vin) 
+   if(!vin) 
    {
     throw new ApiError("Registration number is required.", 400);
    }
 
-   if(!registerDate || !registrationNumber) {
+   if(!registerDate || !expiryDate) {
     throw new ApiError("Registration date and expiry date are required.", 400);
    }
     const userId = req.user._id;
@@ -29,6 +56,7 @@ const registerDetails = asyncHandler( async(req, res) => {
         vin: vin
     });
 
+   // console.log(vehicleExist);
     const userDetailsExist = await UserDetails.find({
         user: userId
     })
@@ -36,6 +64,8 @@ const registerDetails = asyncHandler( async(req, res) => {
     if(!userDetailsExist) {
         throw new ApiError("User details not found", 404);
     }
+
+   
 
     // registerSchema.pre('save', async function(next) {
     //     const vehicle = await Vehicle.findById(this.vehicle);
@@ -61,12 +91,22 @@ const registerDetails = asyncHandler( async(req, res) => {
         throw new ApiError("Failed to upload image", 500);
     }
 
-    const registrationExist = await Register.findOne({ registrationNumber });
+    const registrationExist = await Register.findOne({ vin });
     if (registrationExist) {
-        throw new ApiError("Registration number already exists.", 400);
+        throw new ApiError("Registration  already exists.", 400);
     }
 
-    console.log(userDetailsExist._id);
+    if(registrationNumber ==="") {
+        const { province, district } = userDetailsExist[0].address;
+
+       // console.log(province, district);
+
+       registrationNumber = await generateRegistratinNumber(province, district);
+
+       //console.log(registrationNumber);
+    }
+
+   // console.log(userDetailsExist._id);
 
 
     const registration = await Register.create({

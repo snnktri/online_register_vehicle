@@ -8,8 +8,8 @@ const Status = () => {
   const handleClick = async() => {
    try {
     const response = await status(registrationNumber);
-    console.log(response.data);
-    setStatusData(response.data);
+    console.log(response);
+    setStatusData(response);
    } catch (error) {
     console.error("Error on searching: ", error.message);
    }
@@ -28,7 +28,17 @@ const Status = () => {
         <button onClick={handleClick} className='p-2 bg-blue-500 w-[40%] md:w-[20%] rounded-xl hover:bg-blue-700 transition-all duration-300 ease-in-out cursor-pointer hover:scale-105'>Check Status</button>
       </div>
       <div>
-
+        <div>
+          {
+            !statusData.success ? (
+              <p>No data found for the provided registration number.</p>
+            ) : (<div>
+              <span>Status: {statusData.data[0].status}</span>
+              <span>Registration Number: {statusData.data[0].registrationNumber}</span>
+              <span>Owner Name: {statusData.data[0].userDetail.firstName} {statusData.data[0].userDetail.lastName}</span>
+              </div>)
+          }
+        </div>
       </div>
     </div>
   )
