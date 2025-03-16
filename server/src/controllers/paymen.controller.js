@@ -12,7 +12,7 @@ import { UserDetails } from "../models/userDetails.model.js";
 
 
 export const paymentTrnasfer = asyncHandler( async (req, res) => {
-    const {  status = "pending", registrationNumber, vin} = req.body;
+    const {  status = "pending", vin} = req.body;
 
     const user = req.user._id;
 
@@ -20,7 +20,7 @@ export const paymentTrnasfer = asyncHandler( async (req, res) => {
 
     console.log("fkdf");
 
-    if(!registrationNumber || !vin) {
+    if(!vin) {
         throw new ApiError(400, "Registration number and VIN are required.");
     }
 
@@ -29,7 +29,7 @@ export const paymentTrnasfer = asyncHandler( async (req, res) => {
     }
 
     const registrationExists = await Register.findOne({
-        registrationNumber
+        vin: vin
     })
 
     if (!registrationExists) {
@@ -110,7 +110,6 @@ export const paymentTrnasfer = asyncHandler( async (req, res) => {
       const paymentCreated = await PaymentFee.create(
         {
             user,
-            registrationNumber,
             vin,
             status,
             registerAmount: totalAmount

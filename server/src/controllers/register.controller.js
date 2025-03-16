@@ -56,6 +56,10 @@ const registerDetails = asyncHandler( async(req, res) => {
         vin: vin
     });
 
+    if(!vehicleExist) {
+        throw new ApiError("Vehicle not found", 404);
+    }
+
    // console.log(vehicleExist);
     const userDetailsExist = await UserDetails.find({
         user: userId
@@ -66,20 +70,6 @@ const registerDetails = asyncHandler( async(req, res) => {
     }
 
    
-
-    // registerSchema.pre('save', async function(next) {
-    //     const vehicle = await Vehicle.findById(this.vehicle);
-     
-    //     if(!vehicle) return next();
-     
-    //     const vehicleType = vehicle.type;
-    //     const registerFee = vehilceRegisterAmount[vehicleType];
-    //     console.log(register)
-    //     this.registerAmount = registerAmount;
-        
-    //     next();
-    //   });
-    
 
     const thridPartyInsurance = req.file;
 
