@@ -197,7 +197,7 @@ export const statusReturn = asyncHandler(async(req, res) => {
     throw new ApiError(404, "Registration not found");
   }
   const vin = registerExist.vin;
-  console.log(vin);
+ // console.log(vin);
 
   const vehicleExist = await Vehicle.findOne({
     vin: vin
@@ -309,7 +309,7 @@ export const returnPaymentDetails = asyncHandler(async (req, res) =>{
     throw new ApiError(401, "User not authenticated");
   }
 
-  console.log(user._id);
+  //console.log(user._id);
   const paymentDetails = await PaymentFee.findOne({
     user: user._id
   }).sort({createdAt: -1});

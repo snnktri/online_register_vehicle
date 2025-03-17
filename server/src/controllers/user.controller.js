@@ -4,9 +4,10 @@ import {uploadonCloudinary } from "../utils/cloudineary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { useReducer } from "react";
 
 const userRegister = asyncHandler(async (req, res)=> {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if([email, password].some(field => field?.trim() === "")) {
         throw new ApiError("All fields are required", 400);
@@ -21,7 +22,7 @@ const userRegister = asyncHandler(async (req, res)=> {
     const userCreate = await User.create({
         email,
         password,
-        role: "USER"
+        role:"USER",
     });
 
     //console.log(userCreate);
@@ -131,6 +132,9 @@ const loginUser = asyncHandler( async(req, res) => {
     if(!user) {
         throw new ApiError("Invalid email or password", 401);
     }
+    if(user.role === "ADMIN") {
+        throw new ApiError("Admin access denied", 403);
+    }
 
     const isPasswordValid = await user.isPasswordCorrect(password);
 
@@ -191,9 +195,64 @@ const protectedUser = asyncHandler(async (req, res) => {
     if(!req.user) {
         throw new ApiError(401, "Not authorized");
     }
+
+    if(req.user.role === "ADMIN") {
+        throw new ApiError("Admin access denied", 403);
+    }
     return res.status(200).json(
         new ApiResponse(200, req.user, "protected user")
     );
 
 })
-export { registerDetails, userRegister, loginUser, logout, protectedUser };
+
+const loginAdmin = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    if([email, password].some(field => field?.trim() === "")) {
+        throw new ApiError("All fields are required", 400);
+    }
+
+    const user = await User.findOne({email});
+    if(!user) {
+        throw new ApiError("Invalid email or password", 401);
+    }
+
+    if(user.role!== "ADMIN") {
+        throw new ApiError("Admin access denied", 403);
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(password);
+
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid user credentials")
+    }
+
+    const accessToken = await user.generateAccessToken();
+    if(!accessToken) {
+        throw new ApiError("Failed to generate access token", 500);
+    }
+    const loginUser = await User.findById(user._id).select("-password");
+
+    const options = {
+        httpOnly: true,
+    }
+
+    return res.status(200).
+    cookie("accessToken", accessToken, options).
+    json(
+        new ApiResponse(200, {
+            loginUser,
+            accessToken: accessToken
+        }, "admin user logged in successfully")
+    );
+});
+
+const adminProtectd = asyncHandler(async(req, res) => {
+    const user = req.user;
+    if(!user || user.role!== "ADMIN") {
+        throw new ApiError(401, "Not authorized as admin");
+    }
+    return res.status(200).json(
+        new ApiResponse(200, user, "admin protected user")
+    );
+})
+export { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd };
