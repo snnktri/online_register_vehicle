@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { verifyJWT } from "../middelwares/auth.middelware.js";
 import { upload } from "../middelwares/multer.middelware.js";
-import { registerDetails } from "../controllers/register.controller.js";
+import { registerDetails, registerNuber } from "../controllers/register.controller.js";
 import { paymentTrnasfer, statusUpdate, statusReturn, returnPaymentDetails } from "../controllers/paymen.controller.js";
 
 
@@ -31,5 +31,9 @@ router.route("/statusReturn").get(
 router.route("/successPayment").get(
     verifyJWT,
     returnPaymentDetails
-)
+),
+
+router.route("/registerNumber").post(
+    registerNuber
+);
 export default router;

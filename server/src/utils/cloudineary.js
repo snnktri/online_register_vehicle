@@ -32,7 +32,7 @@ const uploadonCloudinary = async (localFilePath) => {
         return response;
 
     } catch (error) {
-        fs.unlinkSync(localFilePath); // Ensure the file is deleted on error
+        fs.unlinkSync(localFilePath);
         console.error("Error uploading image: " + error.message);
         return null;
     }

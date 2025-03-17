@@ -174,10 +174,10 @@ export const statusUpdate = asyncHandler( async(req, res) => {
 });
 
 export const statusReturn = asyncHandler(async(req, res) => {
-  const { registrationNumber } = req.query;
+  const { vin } = req.query;
   const user = req.user;
 
-  if(!registrationNumber) {
+  if(!vin) {
     throw new ApiError(400, "Registration number is required.");
   }
 
@@ -189,14 +189,16 @@ export const statusReturn = asyncHandler(async(req, res) => {
 
   const registerExist = await Register.findOne(
     {
-      registrationNumber: registrationNumber
+      vin: vin
     }
   );
+
+ // console.log(registerExist);
 
   if(!registerExist) {
     throw new ApiError(404, "Registration not found");
   }
-  const vin = registerExist.vin;
+  const registrationNumber = registerExist.registrationNumber;
  // console.log(vin);
 
   const vehicleExist = await Vehicle.findOne({
@@ -253,8 +255,8 @@ export const statusReturn = asyncHandler(async(req, res) => {
     {
       $lookup: {
         from: "registers",
-        localField: "registrationNumber",
-        foreignField: "registrationNumber",
+        localField: "vin",
+        foreignField: "vin",
         as: "registration"
       }
     },
