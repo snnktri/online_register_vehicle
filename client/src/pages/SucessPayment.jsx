@@ -1,22 +1,20 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
+const SuccessPayment = () => {
+  const location = useLocation();
 
-const SucessPayment = () => {
-    const location = useLocation();
-  
-    // Extract data from the location's state
-    const { paymentData, transaction_uuid } = location.state || {};
-  
-    return (
-      <div>
-        <h1>Payment Successful</h1>
-        <p>Status: {paymentData?.status}</p>
-        <p>Registration Number: {paymentData?.registrationNumber}</p>
-        <p>Transaction ID: {transaction_uuid}</p>
-        {/* You can render other details as needed */}
-      </div>
-    );
+  const { data = {}, transaction_uuid } = location.state || {};
+
+  console.log(data.data.status); 
+
+  return (
+    <div>
+      <h1>Payment Successful</h1>
+      <p>Status: {data.data?.status}</p>
+      <p>Registration Amount: {data.data?.registerAmount}</p>
+    </div>
+  );
 }
 
-export default SucessPayment
+export default SuccessPayment;

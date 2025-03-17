@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { status } from '../services/Register';
 
 const Status = () => {
@@ -6,17 +6,23 @@ const Status = () => {
   const [statusData, setStatusData] = useState([]);
 
   const handleClick = async() => {
+    if(!registrationNumber) return false;
    try {
     const response = await status(registrationNumber);
-    console.log(response);
+    //console.log(response.data);
     setStatusData(response);
    } catch (error) {
     console.error("Error on searching: ", error.message);
    }
   }
+
+  // useEffect(() => {
+  //   console.log(statusData);
+  //   console.log(statusData.userDetail.firstName + " " + statusData.userDetail.profile)
+  // }, [statusData])
   return (
     <div className='min-h-screen flex flex-col items-center'>
-      <div className='w-full flex flex-col items-center gap-4'>
+      <div className='w-full flex flex-col items-center gap-4 mb-5'>
         <label htmlFor="" className='p-2 mt-2 text-center'>Enter a Registratin Number to find the status</label>
         <input
           type="text"
@@ -32,11 +38,54 @@ const Status = () => {
           {
             !statusData.success ? (
               <p>No data found for the provided registration number.</p>
-            ) : (<div>
-              <span>Status: {statusData.data[0].status}</span>
-              <span>Registration Number: {statusData.data[0].registrationNumber}</span>
-              <span>Owner Name: {statusData.data[0].userDetail.firstName} {statusData.data[0].userDetail.lastName}</span>
-              </div>)
+            ) : (
+              (()=>{
+                const data = statusData.data[0];
+                const { userDetail, vehicle, status, registerAmount, vin} = data;
+                // console.log(userDetail);
+                // console.log(vehicle);
+                // console.log(status);
+                // console.log(registerAmount);
+                // console.log(vin);
+
+                return (
+                  <div className="w-full my-4 h-auto bg-gray-200 flex items-center justify-center">
+                    <div className="flex bg-white h-auto w-full shadow-2xl flex-col justify-center items-center p-6 rounded-lg gap-y-6">
+                      {/* Profile Image */}
+                      <div className="flex items-center justify-center w-[200px] h-[200px] mb-4">
+                        <img 
+                          src={userDetail.profile} 
+                          alt="profile" 
+                          className="object-cover rounded-2xl shadow-lg" 
+                        />
+                      </div>
+                      
+                      {/* User Details */}
+                      <div className="space-y-2">
+                        <p className="text-xl font-semibold">Owner Name: {userDetail.firstName} {userDetail.lastName}</p>
+                        <p className="text-lg">Vehicle Model: {vehicle.model}</p>
+                        <p className="text-lg">Status: {status}</p>
+                        <p className="text-lg">Registration Amount: {registerAmount}</p>
+                        <p className="text-lg">VIN: {vin}</p>
+                        
+                        {/* Address */}
+                        <p className="text-lg">
+                          Address: {userDetail.address.province}, {userDetail.address.district}, {userDetail.address.city}
+                        </p>
+                
+                        {/* Registration Information */}
+                        <p className="text-lg">Registration Number: {registrationNumber}</p>
+                        <p className="text-lg">Nagarikta Number: {userDetail.nagarkitaNumber}</p>
+                
+                        {/* Add more details as needed */}
+                      </div>
+                    </div>
+                  </div>
+                );
+                
+
+              })()
+            )
           }
         </div>
       </div>

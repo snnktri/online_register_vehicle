@@ -11,6 +11,7 @@ export const registerForm = async(data) => {
             }
         }
     )
+    return response.data;
    } catch (error) {
     console.error("Error on submitting the form ", error.message);
    }

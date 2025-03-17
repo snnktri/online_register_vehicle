@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const Payment = () => {
   const [isPayment, setIsPayment] = useState({
     vin: '',
-    registrationNumber: '',
     paymentOption: 'esewa'
   });
 
@@ -33,14 +32,12 @@ const Payment = () => {
     e.preventDefault();
     try {
       const response = await registerPayment(isPayment);
+      //console.log(response.data);
       if (response.success) {
         console.log('Payment registered successfully');
         setIsPayment({
           vin: '',
-          registrationNumber: '',
-          vehicleType: '',
           paymentOption: 'esewa',
-          paymentAmount: 0
         });
         setIsComplete(false);
         toast.success("Payment completed successfully.");
@@ -48,7 +45,7 @@ const Payment = () => {
           {
             state: {
               data: response.data,
-              transaction_uuid: responseData.transaction_uuid
+              transaction_uuid: response.data.transaction_uuid
             }
           }
         );
@@ -104,18 +101,6 @@ const Payment = () => {
               type="text"
               name="vin"
               value={isPayment.vin}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-              required
-            />
-          </div>
-
-          <div>
-            <label className='block text-sm font-medium'>Registration Number</label>
-            <input
-              type="text"
-              name="registrationNumber"
-              value={isPayment.registrationNumber}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
               required

@@ -9,6 +9,7 @@ import RegisterVehicle from './pages/RegisterVehicle';
 import Payment from './pages/Payment';
 import UserProfileInterface from './pages/UserProfileInterface';
 import Status from './pages/Status';
+import SucessPayment from './pages/SucessPayment';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -49,6 +50,10 @@ const App = () => {
           {
             path: "status",
             element: <Status />
+          },
+          {
+            path: "SucessPayment",
+            element: <SucessPayment />
           }
         ]
       }

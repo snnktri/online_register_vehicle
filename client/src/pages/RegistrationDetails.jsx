@@ -52,7 +52,9 @@ const handleChangeFile = (e) => {
     try {
       console.log(formData);
       const response = await registerForm(formData);
+      console.log(response.data.registrationNumber);
       if(response.success) {
+        console.log("Registration details submitted successfully");
         setRegData({
           registerDate: '',                  
           expiryDate: '',         

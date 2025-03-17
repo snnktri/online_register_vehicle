@@ -66,7 +66,7 @@ const RegisterVehicle = () => {
         //console.log(formInput);
         try {
             const response = await vehicleForm(formInput);
-            console.log(response.data);
+           // console.log(response.data);
 
             if(response.success) {
                 console.log("Vehicle registered successfully");
