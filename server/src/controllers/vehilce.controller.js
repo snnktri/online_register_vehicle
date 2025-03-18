@@ -73,6 +73,20 @@ const registerVehilcleDetails = asyncHandler(async (req, res) => {
 //     const { vin } = req.
 // })
 
+const getVehicleDetails = asyncHandler(async(req, res) => {
+    const { vin } = req.query;
+    if(!vin) {
+        throw new ApiError("VIN is required.", 400);
+    }
+    const vehicle = await Vehicle.findOne({ vin });
+    if(!vehicle) {
+        throw new ApiError("Vehicle not found", 404);
+    }
+    return res.status(200).json(
+        new ApiResponse(200, vehicle, "Vehicle details fetched successfully.")
+    );
+})
 export {
     registerVehilcleDetails,
-}
+    getVehicleDetails,
+ };

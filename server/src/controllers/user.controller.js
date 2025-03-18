@@ -255,4 +255,32 @@ const adminProtectd = asyncHandler(async(req, res) => {
         new ApiResponse(200, user, "admin protected user")
     );
 })
-export { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd };
+
+const getUserDetails = asyncHandler(async (req, res) => {
+    const user = req.query;
+    console.log(user);
+
+    if(!user) {
+        throw new ApiError("User not found", 404);
+    }
+
+    const userExist = await User.findById(user.user);
+    if(!userExist) {
+        throw new ApiError("User not found", 404);
+    }
+
+    console.log("1");
+
+    const userDetails = await UserDetails.findOne({
+        user: user.user
+    }).
+    populate(
+        { path: "user", select: "firstName lastName email" }
+    );
+
+    return res.status(200).json(
+        new ApiResponse(200, userDetails, "User details fetched successfully")
+    );
+ });
+export { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd, getUserDetails
+ };

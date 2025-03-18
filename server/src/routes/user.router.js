@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd } from "../controllers/user.controller.js";
+import { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd, getUserDetails } from "../controllers/user.controller.js";
 import { upload } from "../middelwares/multer.middelware.js";
 import { verifyJWT } from "../middelwares/auth.middelware.js"
 
@@ -43,6 +43,8 @@ router.route("/register").post(
     registerDetails
 );
 
-router.route("/protectedAdmin").get(verifyJWT, adminProtectd)
+router.route("/protectedAdmin").get(verifyJWT, adminProtectd);
+
+router.route("/getUser").get(getUserDetails);
 
 export default router;

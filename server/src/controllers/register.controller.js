@@ -184,8 +184,24 @@ const updateRegistration = asyncHandler(async(req, res) => {
     );
 })
 
+const getDetails = asyncHandler( async (req, res) => {
+    const { vin } = req.query;
+    if(!vin) {
+        throw new ApiError("VIN is required.", 400);
+    }
+    const registrationExist = await Register.findOne({ vin });
+    if(!registrationExist) {
+        throw new ApiError("Registration not found", 404);
+    }
+    return res.status(200).
+    json(
+        new ApiResponse(200, registrationExist, "Registration details retrieved successfully.")
+    );
+})
+
 
 export {
     registerDetails, registerNuber,
-    updateRegistration
+    updateRegistration,
+    getDetails
 }
