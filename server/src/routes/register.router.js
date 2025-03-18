@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { verifyJWT } from "../middelwares/auth.middelware.js";
 import { upload } from "../middelwares/multer.middelware.js";
-import { registerDetails, registerNuber } from "../controllers/register.controller.js";
-import { paymentTrnasfer, statusUpdate, statusReturn, returnPaymentDetails } from "../controllers/paymen.controller.js";
+import { registerDetails, registerNuber, updateRegistration } from "../controllers/register.controller.js";
+import { paymentTrnasfer, statusUpdate, statusReturn, returnPaymentDetails, allDatas, updatePay } from "../controllers/paymen.controller.js";
 
 
 const router = Router();
@@ -18,7 +18,7 @@ router.route("/payment").post(
     paymentTrnasfer
 )
 
-router.route("/statusUpdate").post(
+router.route("/statusUpdate").put(
     verifyJWT,
     statusUpdate
 );
@@ -36,4 +36,19 @@ router.route("/successPayment").get(
 router.route("/registerNumber").post(
     registerNuber
 );
+
+router.route("/allDatas").get(
+    verifyJWT,
+    allDatas
+);
+
+router.route("/updateRegister").put(
+    verifyJWT,
+    upload.single("thridPartyInsurance"),
+    updateRegistration);
+router.route("/updatePay").put(
+    verifyJWT,
+    updatePay);
+
+
 export default router;

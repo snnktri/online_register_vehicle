@@ -137,7 +137,55 @@ const registerNuber = asyncHandler(async (req, res) => {
     );
 })
 
+const updateRegistration = asyncHandler(async(req, res) => {
+    const user = req.user;
+    if(!user) {
+        throw new ApiError("Not authorized", 401);
+    }
+
+    const { registrationNumber, registerDate, expiryDate, vin } = req.body;
+    console.log(req.body);
+
+    const vehicleExist = await Vehicle.findOne({
+        vin: vin
+    });
+
+    if(!vehicleExist) {
+        throw new ApiError("Vehicle not found", 404);
+    }
+
+    const thridPartyInsurance = req.file;
+
+    // console.log(thridPartyInsurance);
+ 
+     const isUrl = await uploadonCloudinary(thridPartyInsurance.path);
+ 
+     if (!isUrl) {
+         throw new ApiError("Failed to upload image", 500);
+     }
+ 
+    
+    const registration = await Register.findOneAndUpdate(
+        { vin },
+        {
+            registrationNumber,
+            registerDate,
+            expiryDate,
+            thridPartyInsurance: isUrl.url 
+        },
+        { new: true }
+    ).lean();
+    if(!registration) {
+        throw new ApiError("Registration not found", 404);
+    }
+    return res.status(200).
+    json(
+        new ApiResponse(200, registration, "Registration details updated successfully.")
+    );
+})
+
 
 export {
-    registerDetails, registerNuber
+    registerDetails, registerNuber,
+    updateRegistration
 }

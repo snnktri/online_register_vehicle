@@ -6,7 +6,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerVehilcleDetails = asyncHandler(async (req, res) => {
-    const { brand, model, color, vin, engineNumber, manufacutureData, type, fuelType, licencePlate } = req.body;
+    const { brand, model, color, vin, engineNumber, manufacutureData, type, fuelType } = req.body;
 
     console.log(req.body);
 
@@ -52,9 +52,8 @@ const registerVehilcleDetails = asyncHandler(async (req, res) => {
         type,
         fuelType,
         vehiclePurchaseProof: vehiclePurchaseProofUrl?.url,
-        vehiclePhoto: vehilePhotosUrl,
-        licencePlate: licencePlate || ""
-    })
+        vehiclePhoto: vehilePhotosUrl
+     })
 
     const createVehicle = await Vehicle.findById(vehicle._id);
 
