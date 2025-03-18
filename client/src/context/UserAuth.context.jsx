@@ -12,7 +12,7 @@ export const UserContextProvider = ({children}) => {
             const token = localStorage.getItem("accessTokenUser");
             //console.log("Access token:", token);
             if(!token) {
-                console.log("Usr not logged in.");
+               // console.log("Usr not logged in.");
                 return ;
             }
            try {

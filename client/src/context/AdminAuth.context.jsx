@@ -1,16 +1,32 @@
 import React, { useState, createContext, useEffect } from "react";
 import { api } from "../utils/AxiosApi";
+import { getALlData } from '../services/admin';
 
 
-export const adminContext = createContext();
+export const AdminContext = createContext();
 
-export const admiinContextProvider = ({children}) => {
+export const AdmiinContextProvider = ({children}) => {
     const [admin, setAdmin] = useState(false);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const loadfun = async () => {
+          try {
+            const resposne = await getALlData();
+            
+            setData(resposne.data);
+           
+          } catch (error) {
+            console.error(error);
+          }
+        }
+       loadfun();
+      }, [admin])
 
     useEffect(() => {
        const adminauth = async () => {
         try {
-            const token = localhost.getItem("accessToken");
+            const token = localStorage.getItem("token");
             if(!token) {
                 console.log("Access denied");
                 return;
@@ -23,10 +39,9 @@ export const admiinContextProvider = ({children}) => {
                     },
                 }
             );
-
-            if(response.success) {
+           // console.log(response);
                 setAdmin(true);
-            }
+            
         } catch (error) {
             console.error("Error occurred.:", error);
             setAdmin(false);
@@ -37,8 +52,8 @@ export const admiinContextProvider = ({children}) => {
     }, [])
 
     return (
-        <adminContext.Provider value={{setAdmin, admin}} >
+        <AdminContext.Provider value={{setAdmin, admin, data}} >
             {children}
-        </adminContext.Provider>
+        </AdminContext.Provider>
     )
 }

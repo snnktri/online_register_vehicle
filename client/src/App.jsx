@@ -10,6 +10,15 @@ import Payment from './pages/Payment';
 import UserProfileInterface from './pages/UserProfileInterface';
 import Status from './pages/Status';
 import SucessPayment from './pages/SucessPayment';
+import LoginAdAdmin from './admin/LoginAdAdmin';
+import AdminPanel from './admin/AdminPanel';
+import AdminBoard from './admin/AdminBoard';
+import UpdateRegister from './pages/UpdateRegister';
+import UpdatePayment from './pages/UpdatePayment';
+import ChangeStatus from './admin/ChangeStatus';
+import UserDetails from './admin/UserDetails';
+import VehicleDetails from './admin/VehicleDetails';
+import RegisterDetails from './admin/RegisterDetails';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -52,8 +61,49 @@ const App = () => {
             element: <Status />
           },
           {
+            path: "updateRegister",
+            element: <UpdateRegister />
+          },
+          {
             path: "SucessPayment",
             element: <SucessPayment />
+          },
+          {
+            path: "updatePay",
+            element: <UpdatePayment />
+          },
+
+          {
+            path: "loginAdmin",
+            element: <LoginAdAdmin />
+          },
+          {
+            path: "admin",
+            element: <AdminPanel />,
+            children: [
+              {
+                index: true,
+                element: <AdminBoard />
+              },
+              {
+                path: "changeStutus",
+                element: <ChangeStatus />
+              },
+              {
+                path: "userDetails",
+                element: <UserDetails />
+              },
+              {
+                path: "vDetails",
+                element: <VehicleDetails />
+              },
+              {
+                path: "rDetails",
+                element: <RegisterDetails />
+              },
+
+              
+            ]
           }
         ]
       }

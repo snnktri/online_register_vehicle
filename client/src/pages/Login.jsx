@@ -58,6 +58,7 @@ const Login = () => {
           </form>
           <div>
             <p className='text-center text-gray-600 mt-2'>Don't have an account? <Link className='text-blue-600' to="/">Sign Up</Link></p>
+            <p className='text-center text-gray-600 mt-2'>Login as amin!! <Link className='text-blue-600' to="/loginAdmin">Login</Link></p>
           </div>
         </div>
       </div>

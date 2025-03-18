@@ -39,6 +39,18 @@ const UserProfileInterface = () => {
                 </NavLink>
             </li>
             <li className='w-full text-center bg-blue-500 p-2 rounded text-white hover:bg-blue-700 hover:scale-105 cursor-pointer'>
+                <NavLink to="/updateRegister">
+                 Update Registration Details
+                </NavLink>
+            </li>
+
+            <li className='w-full text-center bg-blue-500 p-2 rounded text-white hover:bg-blue-700 hover:scale-105 cursor-pointer'>
+                <NavLink to="/updatePay">
+                 Update Payment
+                </NavLink>
+            </li>
+
+            <li className='w-full text-center bg-blue-500 p-2 rounded text-white hover:bg-blue-700 hover:scale-105 cursor-pointer'>
                 <NavLink to="/status">
                  Check Status
                 </NavLink>
