@@ -1,7 +1,12 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
+import { logOut } from '../services/admin';
 
 const AdminPanel = () => {
+
+  const handleLogout = async () => {
+    await logOut();
+  }
   return (
     <div className="w-full min-h-screen flex">
       
@@ -52,6 +57,9 @@ const AdminPanel = () => {
             >
               Change Status
             </NavLink>
+          </li>
+          <li>
+            <button className="text-lg hover:text-yellow-400 cursor-pointer" onClick={handleLogout}>logout</button>
           </li>
           
         </ul>

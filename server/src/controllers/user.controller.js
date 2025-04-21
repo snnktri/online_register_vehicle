@@ -282,5 +282,28 @@ const getUserDetails = asyncHandler(async (req, res) => {
         new ApiResponse(200, userDetails, "User details fetched successfully")
     );
  });
+
+//  const logout = asyncHandler( async (req, res) => {
+//     const user = req.user;
+
+//     console.log(user);
+
+//     const userexist = await User.findById(user._id);
+
+//     if(!userexist) {
+//         throw new ApiError(404, "User not found");
+//     }
+
+//     const options = {
+//         httpOnly: true,
+//     }
+
+//     return res.status(200).
+//     clearCookie("accessToken", options).
+//     json(
+//         new ApiResponse(200, null, "user logged out successfully")
+//     );
+
+// })
 export { registerDetails, userRegister, loginUser, logout, protectedUser, loginAdmin, adminProtectd, getUserDetails
  };

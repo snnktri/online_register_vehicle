@@ -66,3 +66,25 @@ export const registerDetails = async(vin) => {
         console.error("Error getting register details: ", error.message);
     }
 }
+
+export const logOut = async() => {
+    const tokens = localStorage.getItem("token");
+    console.log(tokens);
+    try {
+        const response = await api.get("/users/logout",
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        );
+        
+        if (response.status === 200) {
+            localStorage.removeItem("token");
+            console.log("Successfully logged out");
+            window.location.href = "/login"; 
+        }
+    } catch (error) {
+        console.error("Error log out: ", error.message);
+    }
+}
