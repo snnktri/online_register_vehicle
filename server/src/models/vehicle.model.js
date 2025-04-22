@@ -43,7 +43,7 @@ const vehicleSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ['Truck', 'Bus', 'Car', 'Motercycle'],
+        enum: ['Truck', 'Bus', 'Car', 'Motorcycle'],
         required: true,
     },
     fuelType: {
@@ -54,6 +54,10 @@ const vehicleSchema = new Schema({
     vehiclePurchaseProof: {
         type: String,
         required: true
+    },
+    licencePlate: {
+        type: String,
+        required: false
     }
 },
 {

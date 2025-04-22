@@ -51,6 +51,6 @@ router.route("/updatePay").put(
     updatePay);
 
 
-router.route("/details").get(getDetails);
+router.route("/details").get(getDetails); 
 
 export default router;

@@ -86,7 +86,7 @@ const registerDetails = asyncHandler( async(req, res) => {
         throw new ApiError("Registration  already exists.", 400);
     }
 
-    if(registrationNumber ==="") {
+    if(registrationNumber === "") {
         const { province, district } = userDetailsExist[0].address;
 
        // console.log(province, district);

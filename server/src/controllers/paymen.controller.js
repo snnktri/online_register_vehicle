@@ -14,6 +14,7 @@ import { UserDetails } from "../models/userDetails.model.js";
 export const paymentTrnasfer = asyncHandler( async (req, res) => {
     const {  status = "pending", vin} = req.body;
 
+
     const user = req.user._id;
 
     console.log(req.body);
@@ -48,7 +49,7 @@ export const paymentTrnasfer = asyncHandler( async (req, res) => {
 
     // payment amount predefind
 
-    const feeForVehicle = {'Truck':5000, 'Bus':4000, 'Car':3000, 'Motercycle':2000};
+    const feeForVehicle = {'Truck':5000, 'Bus':4000, 'Car':3000, 'Motorcycle':2000};
 
     const vehicleType = vehicleExist.type;
 

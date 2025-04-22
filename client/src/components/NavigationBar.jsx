@@ -11,7 +11,7 @@ const NavigationBar = () => {
 //  console.log(user);
 //console.log(admin);
   return (
-  <header className="mt-0 container bg-white shadow-md shadow-gray-300 h-auto">
+  <header className="mt-0 w-full bg-white shadow-md shadow-gray-300 h-auto">
     <nav className='w-full flex mx-auto items-center flex-col justify-center gap-4'>
       <div className='mt-5 mx-6 flex flex-col md:flex-row items-center justify-center gap-2'>
         {/* image */}
